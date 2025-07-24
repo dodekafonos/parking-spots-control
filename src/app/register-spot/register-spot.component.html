@@ -1,0 +1,123 @@
+<!-- src/app/parking-spot-form/parking-spot-form.component.html -->
+<form [formGroup]="parkingSpotForm" (ngSubmit)="onSubmit()" class="grid">
+  <div class="col-12">
+    <label for="parkingSpotNumber">Parking Spot Number*</label>
+    <input 
+      id="parkingSpotNumber"
+      type="text" 
+      pInputText 
+      formControlName="parkingSpotNumber"
+      [maxlength]="10"
+      placeholder="e.g., A-101">
+    <small *ngIf="parkingSpotForm.get('parkingSpotNumber')?.invalid" class="p-error">
+      Required, max 10 characters
+    </small>
+  </div>
+
+  <div class="col-12">
+    <label for="licensePlateCar">License Plate*</label>
+    <input 
+      id="licensePlateCar"
+      type="text" 
+      pInputText 
+      formControlName="licensePlateCar"
+      [maxlength]="7"
+      placeholder="e.g., ABC1234">
+    <small *ngIf="parkingSpotForm.get('licensePlateCar')?.invalid" class="p-error">
+      Required, max 7 characters
+    </small>
+  </div>
+
+  <div class="col-12 md:col-4">
+    <label for="brandCar">Car Brand*</label>
+    <input 
+      id="brandCar"
+      type="text" 
+      pInputText 
+      formControlName="brandCar"
+      [maxlength]="70"
+      placeholder="e.g., Toyota">
+    <small *ngIf="parkingSpotForm.get('brandCar')?.invalid" class="p-error">
+      Required, max 70 characters
+    </small>
+  </div>
+
+  <div class="col-12 md:col-4">
+    <label for="modelCar">Car Model*</label>
+    <input 
+      id="modelCar"
+      type="text" 
+      pInputText 
+      formControlName="modelCar"
+      [maxlength]="70"
+      placeholder="e.g., Corolla">
+    <small *ngIf="parkingSpotForm.get('modelCar')?.invalid" class="p-error">
+      Required, max 70 characters
+    </small>
+  </div>
+
+  <div class="col-12 md:col-4">
+    <label for="colorCar">Car Color*</label>
+    <input 
+      id="colorCar"
+      type="text" 
+      pInputText 
+      formControlName="colorCar"
+      [maxlength]="70"
+      placeholder="e.g., Red">
+    <small *ngIf="parkingSpotForm.get('colorCar')?.invalid" class="p-error">
+      Required, max 70 characters
+    </small>
+  </div>
+
+  <div class="col-12 md:col-6">
+    <label for="responsibleName">Responsible Name*</label>
+    <input 
+      id="responsibleName"
+      type="text" 
+      pInputText 
+      formControlName="responsibleName"
+      [maxlength]="130"
+      placeholder="e.g., John Doe">
+    <small *ngIf="parkingSpotForm.get('responsibleName')?.invalid" class="p-error">
+      Required, max 130 characters
+    </small>
+  </div>
+
+  <div class="col-12 md:col-3">
+    <label for="apartment">Apartment*</label>
+    <input 
+      id="apartment"
+      type="text" 
+      pInputText 
+      formControlName="apartment"
+      [maxlength]="30"
+      placeholder="e.g., 101">
+    <small *ngIf="parkingSpotForm.get('apartment')?.invalid" class="p-error">
+      Required, max 30 characters
+    </small>
+  </div>
+
+  <div class="col-12 md:col-3">
+    <label for="block">Block*</label>
+    <input 
+      id="block"
+      type="text" 
+      pInputText 
+      formControlName="block"
+      [maxlength]="30"
+      placeholder="e.g., A">
+    <small *ngIf="parkingSpotForm.get('block')?.invalid" class="p-error">
+      Required, max 30 characters
+    </small>
+  </div>
+
+  <div class="col-12 mt-4">
+    <p-button 
+      type="submit" 
+      icon="pi pi-check" 
+      label="Register Parking Spot"
+      [disabled]="parkingSpotForm.invalid">
+    </p-button>
+  </div>
+</form>

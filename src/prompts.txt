@@ -1,0 +1,179 @@
+
+Hello! Nice to work with you again. 
+Assume the persona of an experienced software engineer working with me on an Angular 18 project. 
+Adhere to Typescript's best practices. 
+As if you were mentoring a junior developer recently hired, create answers to my questions and help me with the tasks to follow.
+
+----------------
+Please pay attention to the versions we are using:
+Environment: 
+- Angular 18.2
+- PrimeNg 18.2
+- Windows 11
+
+Remember that Angular 18 doesn't use `app.module.ts`.
+
+I have created a project and done some basic configuration to test PrimeNg:
+`app.config.ts`:
+```
+// src/app/app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAnimationsAsync(),
+    providePrimeNG({ theme: { preset: Aura } })
+  ]
+};
+
+```
+`app.component.ts`:
+```
+// src/app/app.component.ts
+import { Component } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [ButtonModule],
+  template: `<div class="card p-3"><p-button label="Botão PrimeNG"></p-button></div>`
+})
+export class AppComponent {}
+
+```
+
+`main.ts`:
+```
+// src/main.ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
+
+// Import do CSS do ícones
+import 'primeicons/primeicons.css';
+
+bootstrapApplication(AppComponent, appConfig).catch(err => console.error(err));
+
+```
+
+PrimeNg is working. Now we need to connect to a Spring backend. This is it's documentation:
+```
+## **Base URL**
+
+**`/parking-spot`**
+
+## **Endpoints**
+
+### **1. Create a Parking Spot**
+
+- **Method**: POST
+- **Path**: **`/`**
+- **Request Body** (JSON):
+    
+    json
+    
+    ```
+    {
+      "parkingSpotNumber": "string (required, max 10 chars, unique)",
+      "licensePlateCar": "string (required, max 7 chars, unique)",
+      "brandCar": "string (required, max 70 chars)",
+      "modelCar": "string (required, max 70 chars)",
+      "colorCar": "string (required, max 70 chars)",
+      "responsibleName": "string (required, max 130 chars)",
+      "apartment": "string (required, max 30 chars)",
+      "block": "string (required, max 30 chars)"
+    }
+    ```
+    
+- **Success Response**: 201 Created with the created parking spot object
+- **Error Responses**:
+    - 409 Conflict if license plate, parking spot number, or apartment/block combination already exists
+    - 400 Bad Request if validation fails
+
+### **2. Get All Parking Spots**
+
+- **Method**: GET
+- **Path**: **`/`**
+- **Request Body**: None
+- **Success Response**: 200 OK with array of all parking spots
+- **Pagination**: Not implemented in this endpoint (uses **`findAll()`** without Pageable)
+
+### **3. Get Single Parking Spot**
+
+- **Method**: GET
+- **Path**: **`/{id}`**
+- **Parameters**:
+    - **`id`**: UUID of the parking spot
+- **Success Response**: 200 OK with the parking spot object
+- **Error Response**: 404 Not Found if parking spot doesn't exist
+
+### **4. Update Parking Spot**
+
+- **Method**: PUT
+- **Path**: **`/{id}`**
+- **Parameters**:
+    - **`id`**: UUID of the parking spot to update
+- **Request Body** (same as POST):
+    
+    json
+    
+    ```
+    {
+      "parkingSpotNumber": "string",
+      "licensePlateCar": "string",
+      "brandCar": "string",
+      "modelCar": "string",
+      "colorCar": "string",
+      "responsibleName": "string",
+      "apartment": "string",
+      "block": "string"
+    }
+    ```
+    
+- **Success Response**: 200 OK with updated parking spot object
+- **Error Responses**:
+    - 404 Not Found if parking spot doesn't exist
+    - 400 Bad Request if validation fails
+
+### **5. Delete Parking Spot**
+
+- **Method**: DELETE
+- **Path**: **`/{id}`**
+- **Parameters**:
+    - **`id`**: UUID of the parking spot to delete
+- **Success Response**: 200 OK with success message
+- **Error Response**: 404 Not Found if parking spot doesn't exist
+
+## **Data Model**
+
+The parking spot object returned by the API contains these fields (all required):
+
+json
+
+```
+{
+  "id": "UUID",
+  "parkingSpotNumber": "string",
+  "licensePlateCar": "string",
+  "brandCar": "string",
+  "modelCar": "string",
+  "colorCar": "string",
+  "registrationDate": "LocalDateTime (auto-generated)",
+  "responsibleName": "string",
+  "apartment": "string",
+  "block": "string"
+}
+```
+
+## **Validation Rules**
+
+- All fields are required (annotated with **`@NotBlank`**)
+- **`licensePlateCar`** has maximum length of 7 characters
+- **`parkingSpotNumber`** must be unique
+- **`licensePlateCar`** must be unique
+- Combination of **`apartment`** and **`block`** must be unique
+```
